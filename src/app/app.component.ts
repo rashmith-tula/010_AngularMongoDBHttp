@@ -13,6 +13,7 @@ export class AppComponent implements OnInit {
   person = [];
   formStatus: string = 'Save';
   reactForm: FormGroup;
+  filterSearch: string;
 
   constructor(private mongoService: HttpService) { }
 

@@ -1,5 +1,10 @@
 <!-- mongodb://localhost:27017 -->
 <div class="mt-4 mb-4 container">
+  <div class="row">
+    <div class="col-4">
+      <input class="mb-2 form-control" type="text" placeholder="Status search" [(ngModel)]='filterSearch'>
+    </div>
+  </div>
   <form [formGroup]="reactForm" (ngSubmit)="onSave()">
     <div class="row">
       <div class="col-4">
@@ -28,20 +33,19 @@
     </div>
     <div class="row">
       <div class="col-4">
-        <button type="button" class="btn btn-primary mb-2" (click)="onGet()">Get Persons</button>
-        <button type="submit" class="btn btn-success ml-2 mb-2" [disabled]="reactForm.invalid">{{formStatus}} Person</button>
+        <button type="submit" class="btn btn-success mb-2" [disabled]="reactForm.invalid">{{formStatus}} Person</button>
       </div>
     </div>
   </form>
 
-  <ul class="list-group" *ngFor="let person of persons; let i = index">
+  <ul class="list-group" *ngFor="let person of persons | filter:filterSearch; let i = index">
     <li class="list-group-item" [ngClass]="getBgColor(person)"><strong
         class="ml-2 mr-2 text-primary">{{person.name | uppercase}}</strong>
       <span class="text-dark mr-2 font-weight-bold">| {{person.profession}} |</span>
 
-      
-        <span class="ml-2 badge badge-pill badge-primary">{{person.status}}</span>
-        <div class="d-flex justify-content-end">
+
+      <span class="ml-2 badge badge-pill badge-primary">{{person.status}}</span>
+      <div class="d-flex justify-content-end">
         <div>
           <button class="btn btn-info btn-sm mr-2" (click)="onUpdate(person._id, i)">
             <i class="fa fa-pencil" aria-hidden="true"></i>

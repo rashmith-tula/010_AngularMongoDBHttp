@@ -4,15 +4,18 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { HttpService } from './http.service';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FilterPipe } from './filter.pipe';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    FilterPipe
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
+    FormsModule,
     HttpModule
   ],
   providers: [HttpService],
