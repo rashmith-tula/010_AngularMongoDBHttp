@@ -1,20 +1,56 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<!-- mongodb://localhost:27017 -->
+<div class="mt-4 mb-4 container">
+  <form [formGroup]="reactForm" (ngSubmit)="onSave()">
+    <div class="row">
+      <div class="col-4">
+        <input class="mb-2 form-control" type="text" placeholder="Name" formControlName="name">
+      </div>
+      <div class="col-4">
+        <select class="form-control" placeholder="Profession" formControlName="profession">
+          <option></option>
+          <option>Relative</option>
+          <option>Friend</option>
+          <option>Acquaintance</option>
+          <option>Devotee</option>
+          <option>Anonymous</option>
+        </select>
+      </div>
+      <div class="col-4">
+        <select class="form-control" placeholder="Status" formControlName="status">
+          <option></option>
+          <option>Intelligent</option>
+          <option>Average</option>
+          <option>Dull</option>
+          <option>Crooked</option>
+          <option>Sober</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4">
+        <button type="button" class="btn btn-primary mb-2" (click)="onGet()">Get Persons</button>
+        <button type="submit" class="btn btn-success ml-2 mb-2" [disabled]="reactForm.invalid">{{formStatus}} Person</button>
+      </div>
+    </div>
+  </form>
 
+  <ul class="list-group" *ngFor="let person of persons; let i = index">
+    <li class="list-group-item" [ngClass]="getBgColor(person)"><strong
+        class="ml-2 mr-2 text-primary">{{person.name | uppercase}}</strong>
+      <span class="text-dark mr-2 font-weight-bold">| {{person.profession}} |</span>
+
+      
+        <span class="ml-2 badge badge-pill badge-primary">{{person.status}}</span>
+        <div class="d-flex justify-content-end">
+        <div>
+          <button class="btn btn-info btn-sm mr-2" (click)="onUpdate(person._id, i)">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="onDelete(person._id, i)">
+            <i class="fa fa-trash" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
