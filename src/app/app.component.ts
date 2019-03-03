@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { HttpService } from './http.service';
 
@@ -8,12 +8,14 @@ import { HttpService } from './http.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  @ViewChild('name') nameField: ElementRef;
   title = 'mongoHttp';
   persons = []; //[{name : "Krishna", profession: "Engineer", status: "dull"}];
   person = [];
   formStatus: string = 'Save';
   reactForm: FormGroup;
   filterSearch: string;
+  editStyle: boolean = false;
 
   constructor(private mongoService: HttpService) { }
 
@@ -26,13 +28,26 @@ export class AppComponent implements OnInit {
     this.onGet();
   }
 
-  onGet() {
+  onGet(person?: any) {
     this.mongoService.getPersons()
       .subscribe(
         (response) => {
           console.log(response);
           if (response) {
             this.persons = response;
+            if (person) {
+              let persArray: any[] = [];
+              let i: number = 0;
+              persArray = this.persons;
+              for (const item of persArray) {
+                if (item['_id'] == person['_id']) {
+                  this.persons.splice(i, 1);
+                  this.persons.unshift(item);
+                  break;
+                }
+                i++;
+              }
+            }
           }
         },
 
@@ -54,12 +69,13 @@ export class AppComponent implements OnInit {
       console.log('Updated person :' + this.person);
       this.mongoService.updatePersons(this.person['_id'], this.person)
         .subscribe((response) => {
-          this.onGet();
+          this.onGet(this.person);
+          this.person = [];
         },
           (error) => console.log(error));
 
       this.formStatus = 'Save';
-      this.person = [];
+      this.editStyle = false;
     }
 
     this.reactForm.reset();
@@ -77,6 +93,10 @@ export class AppComponent implements OnInit {
       profession: this.person['profession'],
       status: this.person['status']
     });
+    this.persons.splice(i, 1);
+    this.persons.unshift(this.person);
+    this.nameField.nativeElement.focus();
+    this.editStyle = true;
   }
 
   onDelete(id: string, i: number) {

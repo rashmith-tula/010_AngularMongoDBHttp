@@ -2,16 +2,16 @@
 <div class="mt-4 mb-4 container">
   <div class="row">
     <div class="col-4">
-      <input class="mb-2 form-control" type="text" placeholder="Status search" [(ngModel)]='filterSearch'>
+      <input class="mb-2 form-control" type="text" placeholder="Status search" [(ngModel)]='filterSearch' #filter> 
     </div>
   </div>
   <form [formGroup]="reactForm" (ngSubmit)="onSave()">
     <div class="row">
       <div class="col-4">
-        <input class="mb-2 form-control" type="text" placeholder="Name" formControlName="name">
+        <input class="mb-2 form-control" type="text" placeholder="Name" formControlName="name" #name *ngIf="!filter.value">
       </div>
       <div class="col-4">
-        <select class="form-control" placeholder="Profession" formControlName="profession">
+        <select class="form-control" placeholder="Profession" formControlName="profession" *ngIf="!filter.value">
           <option></option>
           <option>Relative</option>
           <option>Friend</option>
@@ -21,7 +21,7 @@
         </select>
       </div>
       <div class="col-4">
-        <select class="form-control" placeholder="Status" formControlName="status">
+        <select class="form-control" placeholder="Status" formControlName="status" *ngIf="!filter.value">
           <option></option>
           <option>Intelligent</option>
           <option>Average</option>
@@ -32,21 +32,28 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-4">
+      <div class="col-4" *ngIf="!filter.value">
         <button type="submit" class="btn btn-success mb-2" [disabled]="reactForm.invalid">{{formStatus}} Person</button>
       </div>
     </div>
   </form>
 
   <ul class="list-group" *ngFor="let person of persons | filter:filterSearch; let i = index">
-    <li class="list-group-item" [ngClass]="getBgColor(person)"><strong
-        class="ml-2 mr-2 text-primary">{{person.name | uppercase}}</strong>
-      <span class="text-dark mr-2 font-weight-bold">| {{person.profession}} |</span>
+    <li class="list-group-item" [ngClass]="getBgColor(person)">
+      <strong
+        class="ml-2 mr-2" 
+        [ngClass]="{'text-primary' : i != 0 || !editStyle, 'text-danger' : i == 0 && editStyle}">
+        {{person.name | uppercase}}
+      </strong>
+      <span class="text-dark mr-2 font-weight-bold"
+            [ngClass]="{'text-dark' : i != 0 || !editStyle, 'text-danger' : i == 0 && editStyle}">
+        | {{person.profession}} |
+      </span>
 
 
       <span class="ml-2 badge badge-pill badge-primary">{{person.status}}</span>
       <div class="d-flex justify-content-end">
-        <div>
+        <div *ngIf="!filter.value">
           <button class="btn btn-info btn-sm mr-2" (click)="onUpdate(person._id, i)">
             <i class="fa fa-pencil" aria-hidden="true"></i>
           </button>
